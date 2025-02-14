@@ -1,0 +1,92 @@
+API Documentation for User Authentication
+
+Base URL
+
+Endpoints
+1. User Login
+Method: POST
+Endpoint: /api/auth/login
+Request Body:
+username: The username or email of the user (required). thaywo
+password: The password of the user (required). 123456789
+Description: Authenticates a user and returns a JWT token if the credentials are valid.
+
+
+2. User Registration
+Method: POST
+Endpoint: /api/auth/register
+Request Body:
+username: The desired username (required).
+password: The password for the account (required).
+confirm_password: Confirmation of the password (required, must match password).
+email: The email address of the user (required, must be a valid email).
+telephone: The telephone number of the user (required).
+Description: Registers a new user and returns a JWT token if registration is successful.
+
+
+3. Send Password Reset Link
+Method: POST
+Endpoint: api//auth/forgotpassword
+Request Body:
+email: The email address of the user (required, must be a valid email).
+Description: Sends a password reset link to the user's email if the email is registered.
+
+
+4. Reset User Password
+Method: POST
+Endpoint: /api/auth/resetpassword
+Request Body:
+token: The password reset token sent to the user's email (required).
+password: The new password (required).
+confirm_password: Confirmation of the new password (required, must match password).
+Description: Resets the user's password using the provided token and new password.
+
+
+Error Handling
+The API returns appropriate HTTP status codes for different scenarios:
+
+200 OK: Successful request.
+400 Bad Request: Validation errors or malformed requests.
+401 Unauthorized: Invalid username or password.
+404 Not Found: Resource not found (e.g., email not registered, user not found).
+500 Internal Server Error: Server-side errors.
+
+
+Example Requests
+User Login
+POST api//auth/login
+Content-Type: application/json
+
+{
+  "username": "thaywo",
+  "password": "123456789"
+}
+User Registration
+POST /auth/register
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "password": "password123",
+  "confirm_password": "password123",
+  "email": "johndoe@example.com",
+  "telephone": "1234567890"
+}
+
+Send Password Reset Link
+POST api/auth/forgotpassword
+Content-Type: application/json
+
+{
+  "email": "johndoe@example.com"
+}
+
+Reset User Password
+POST /auth/resetpassword
+Content-Type: application/json
+
+{
+  "token": "your-reset-token",
+  "password": "123456789",
+  "confirm_password": "123456789"
+}

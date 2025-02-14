@@ -1,0 +1,89 @@
+API Documentation for Candidates Management
+
+Base URL
+
+1. List Candidates Records
+Method: GET
+Endpoint: /candidates
+Description: Retrieves a list of candidate records.
+
+
+2. View Candidate Record
+Method: GET
+Endpoint: /candidates/view/{recid}
+Path Parameters:
+recid: The unique identifier of the candidate record to view.
+Description: Retrieves a specific candidate record by its ID.
+
+
+3. Add Candidate Record
+Method: POST
+Endpoint: /candidates/add
+Request Body:
+name: The name of the candidate (required).
+skills: A comma-separated list of skills possessed by the candidate (required).
+Description: Adds a new candidate record to the database.
+
+
+4. Get Candidate Record for Edit
+Method: GET
+Endpoint: /candidates/edit/{recid}
+Path Parameters:
+recid: The unique identifier of the candidate record to edit.
+Description: Retrieves a specific candidate record for editing.
+
+
+5. Update Candidate Record
+Method: POST
+Endpoint: /candidates/edit/{recid}
+Path Parameters:
+recid: The unique identifier of the candidate record to update.
+Request Body:
+name: The name of the candidate (optional).
+skills: A comma-separated list of skills possessed by the candidate (optional).
+Description: Updates an existing candidate record in the database.
+
+
+6. Delete Candidate Record
+Method: GET
+Endpoint: /candidates/delete/{recid}
+Path Parameters:
+recid: The unique identifier(s) of the candidate record(s) to delete, separated by commas for multiple records.
+Description: Deletes one or more candidate records from the database.
+
+
+Error Handling
+The API returns appropriate HTTP status codes for different scenarios:
+
+200 OK: Successful request.
+400 Bad Request: Validation errors or malformed requests.
+404 Not Found: Resource not found (e.g., candidate record does not exist).
+500 Internal Server Error: Server-side errors.
+
+
+Example Requests
+List Candidates
+GET /candidates/
+
+View Candidate
+GET /candidates/view/1
+
+Add Candidate
+POST /candidates/add
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "skills": "JavaScript, React, Node.js"
+}
+
+Update Candidate
+POST /candidates/edit/1
+Content-Type: application/json
+
+{
+  "skills": "JavaScript, React, Node.js, TypeScript"
+}
+
+Delete Candidate
+GET /candidates/delete/1
