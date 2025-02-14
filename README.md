@@ -1,5 +1,9 @@
 # Getting Started with Project API
-
+# Job endpoint is located at the root folder
+# Candidate endpoint is located at the root folder
+# authentication endpoint is located at the root folder
+# Database file is located at the root folder
+# Database and other configuartions resides inn the config file. I made use of groq, instead of openAI 
 ## Dev Requirements
 NodeJS version 20 and Above
 
