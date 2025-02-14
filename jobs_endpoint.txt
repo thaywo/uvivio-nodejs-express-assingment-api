@@ -1,97 +1,179 @@
-Base URL
+info:
+  title: Job Management API
+  version: 1.0.0
+  description: API for managing job records and candidate recommendations.
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /jobs :
+  get:
+      summary: List jobs records
+      
+  /jobs/index/{fieldname}/{fieldvalue}:
+    get:
+      summary: List jobs records
+      parameters:
+        - name: fieldname
+          in: path
+          required: false
+          description: The field name to filter jobs.
+          schema:
+            type: string
+        - name: fieldvalue
+          in: path
+          required: false
+          description: The value of the field to filter jobs.
+          schema:
+            type: string
+        - name: search
+          in: query
+          required: false
+          description: Search term to filter jobs.
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: Page number for pagination.
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          description: Number of records per page.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: A list of job records.
+        '500':
+          description: Server error.
 
-/jobs
-Endpoints
-1. List Jobs Records
-Method: GET
-Endpoint: /jobs
-Description: Retrieves a list of job records, 
+  /jobs/view/{recid}:
+    get:
+      summary: View a job record
+      parameters:
+        - name: recid
+          in: path
+          required: true
+          description: The ID of the job record to view.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The job record.
+        '404':
+          description: Job record not found.
+        '500':
+          description: Server error.
 
-2. View Job Record
-Method: GET
-Endpoint: /jobs/view/{recid}
-Path Parameters:
-recid: The unique identifier of the job record to view.
-Description: Retrieves a specific job record by its ID.
+  /jobs/add:
+    post:
+      summary: Insert a new job record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                skills:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: The created job record.
+        '400':
+          description: Invalid input data.
+        '500':
+          description: Server error.
 
-3. Add Job Record
-Method: POST
-Endpoint: /jobs/add
-Request Body:
-title: The title of the job (required).
-description: A description of the job (required).
-skills: A comma-separated list of skills required for the job (required).
-Description: Adds a new job record to the database.
+  /jobs/edit/{recid}:
+    get:
+      summary: Get a job record for editing
+      parameters:
+        - name: recid
+          in: path
+          required: true
+          description: The ID of the job record to edit.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The job record for editing.
+        '404':
+          description: Job record not found.
+        '500':
+          description: Server error.
+    post:
+      summary: Update a job record
+      parameters:
+        - name: recid
+          in: path
+          required: true
+          description: The ID of the job record to update.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                skills:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: The updated job record.
+        '404':
+          description: Job record not found.
+        '500':
+          description: Server error.
 
-4. Get Job Record for Edit
-Method: GET
-Endpoint: /jobs/edit/{recid}
-Path Parameters:
-recid: The unique identifier of the job record to edit.
-Description: Retrieves a specific job record for editing.
+  /jobs/delete/{recid}:
+    get:
+      summary: Delete job records
+      parameters:
+        - name: recid
+          in: path
+          required: true
+          description: The ID(s) of the job record(s) to delete, separated by commas.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The IDs of the deleted job records.
+        '500':
+          description: Server error.
 
-5. Update Job Record
-Method: POST
-Endpoint: /jobs/edit/{recid}
-Path Parameters:
-recid: The unique identifier of the job record to update.
-Request Body:
-title: The title of the job (optional).
-description: A description of the job (optional).
-skills: A comma-separated list of skills required for the job (optional).
-Description: Updates an existing job record in the database.
-
-6. Delete Job Record
-Method: GET
-Endpoint: /jobs/delete/{recid}
-Path Parameters:
-recid: The unique identifier(s) of the job record(s) to delete, separated by commas for multiple records.
-Description: Deletes one or more job records from the database.
-
-7. Get Recommended Candidates for a Job
-Method: GET
-Endpoint: /jobs/{job_id}/candidates
-Path Parameters:
-job_id: The unique identifier of the job for which to recommend candidates.
-Description: Retrieves a list of recommended candidates based on the skills required for the specified job. The top 3 candidates are returned along with a generated professional summary for each.
-
-
-Error Handling
-The API returns appropriate HTTP status codes for different scenarios:
-
-200 OK: Successful request.
-400 Bad Request: Validation errors or malformed requests.
-404 Not Found: Resource not found (e.g., job record does not exist).
-500 Internal Server Error: Server-side errors.
-
-
-Example Requests
-List Jobs
-GET /jobs/
-
-View Job
-GET /jobs/view/1
-
-Add Job
-POST /jobs/add
-Content-Type: application/json
-
-{
-  "title": "Software Engineer",
-  "description": "Develop and maintain software applications.",
-  "skills": "Java, JavaScript, SQL"
-}
-
-Update Job
-POST /jobs/edit/1
-Content-Type: application/json
-
-{
-  "description": "Develop and maintain software applications with a focus on performance."
-}
-
-Delete Job
-GET /jobs/delete/1
-
-Get Recommended Candidates
-GET /jobs/1/candidates
+  /jobs/{job_id}/candidates:
+    get:
+      summary: Get recommended candidates for a job
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          description: The ID of the job to get candidates for.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of recommended candidates.
+        '404':
+          description: Job not found.
+        '500':
+          description: Server error.

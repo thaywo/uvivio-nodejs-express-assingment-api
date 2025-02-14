@@ -1,89 +1,159 @@
-API Documentation for Candidates Management
+openapi: 3.0.0
+info:
+  title: Candidate Management API
+  version: 1.0.0
+  description: API for managing candidate records.
+servers:
+  - url: http://localhost:3000/api
+paths:
 
-Base URL
+/candidates:
+    get:
+      summary: List candidates records
+      
+  /candidates/index/{fieldname}/{fieldvalue}:
+    get:
+      summary: List candidates records
+      parameters:
+        - name: fieldname
+          in: path
+          required: false
+          description: The field name to filter candidates.
+          schema:
+            type: string
+        - name: fieldvalue
+          in: path
+          required: false
+          description: The value of the field to filter candidates.
+          schema:
+            type: string
+        - name: search
+          in: query
+          required: false
+          description: Search term to filter candidates.
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: Page number for pagination.
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          description: Number of records per page.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: A list of candidate records.
+        '500':
+          description: Server error.
 
-1. List Candidates Records
-Method: GET
-Endpoint: /candidates
-Description: Retrieves a list of candidate records.
+  /candidates/view/{recid}:
+    get:
+      summary: View a candidate record
+      parameters:
+        - name: recid
+          in: path
+          required: true
+          description: The ID of the candidate record to view.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The candidate record.
+        '404':
+          description: Candidate record not found.
+        '500':
+          description: Server error.
 
+  /candidates/add:
+    post:
+      summary: Insert a new candidate record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                skills:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: The created candidate record.
+        '400':
+          description: Invalid input data.
+        '500':
+          description: Server error.
 
-2. View Candidate Record
-Method: GET
-Endpoint: /candidates/view/{recid}
-Path Parameters:
-recid: The unique identifier of the candidate record to view.
-Description: Retrieves a specific candidate record by its ID.
+  /candidates/edit/{recid}:
+    get:
+      summary: Get a candidate record for editing
+      parameters:
+        - name: recid
+          in: path
+          required: true
+          description: The ID of the candidate record to edit.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The candidate record for editing.
+        '404':
+          description: Candidate record not found.
+        '500':
+          description: Server error.
+    post:
+      summary: Update a candidate record
+      parameters:
+        - name: recid
+          in: path
+          required: true
+          description: The ID of the candidate record to update.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                skills:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: The updated candidate record.
+        '404':
+          description: Candidate record not found.
+        '500':
+          description: Server error.
 
-
-3. Add Candidate Record
-Method: POST
-Endpoint: /candidates/add
-Request Body:
-name: The name of the candidate (required).
-skills: A comma-separated list of skills possessed by the candidate (required).
-Description: Adds a new candidate record to the database.
-
-
-4. Get Candidate Record for Edit
-Method: GET
-Endpoint: /candidates/edit/{recid}
-Path Parameters:
-recid: The unique identifier of the candidate record to edit.
-Description: Retrieves a specific candidate record for editing.
-
-
-5. Update Candidate Record
-Method: POST
-Endpoint: /candidates/edit/{recid}
-Path Parameters:
-recid: The unique identifier of the candidate record to update.
-Request Body:
-name: The name of the candidate (optional).
-skills: A comma-separated list of skills possessed by the candidate (optional).
-Description: Updates an existing candidate record in the database.
-
-
-6. Delete Candidate Record
-Method: GET
-Endpoint: /candidates/delete/{recid}
-Path Parameters:
-recid: The unique identifier(s) of the candidate record(s) to delete, separated by commas for multiple records.
-Description: Deletes one or more candidate records from the database.
-
-
-Error Handling
-The API returns appropriate HTTP status codes for different scenarios:
-
-200 OK: Successful request.
-400 Bad Request: Validation errors or malformed requests.
-404 Not Found: Resource not found (e.g., candidate record does not exist).
-500 Internal Server Error: Server-side errors.
-
-
-Example Requests
-List Candidates
-GET /candidates/
-
-View Candidate
-GET /candidates/view/1
-
-Add Candidate
-POST /candidates/add
-Content-Type: application/json
-
-{
-  "name": "John Doe",
-  "skills": "JavaScript, React, Node.js"
-}
-
-Update Candidate
-POST /candidates/edit/1
-Content-Type: application/json
-
-{
-  "skills": "JavaScript, React, Node.js, TypeScript"
-}
-
-Delete Candidate
-GET /candidates/delete/1
+  /candidates/delete/{recid}:
+    get:
+      summary: Delete candidate records
+      parameters:
+        - name: recid
+          in: path
+          required: true
+          description: The ID(s) of the candidate record(s) to delete, separated by commas.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The IDs of the deleted candidate records.
+        '500':
+          description: Server error.
