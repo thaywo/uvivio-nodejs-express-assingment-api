@@ -18,7 +18,7 @@ export default {
 		type: "postgres",
 		host: "localhost",
 		username: "postgres",
-		password: "@T25r5s540",
+		password: "@T25r",
 		port: "5433",
 		charset: "utf8",
 		recordlimit: 10,
